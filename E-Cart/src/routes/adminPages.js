@@ -8,7 +8,8 @@ const { checkBody, validationResult } = require("express-validator");
 
 
 
-//displaying the all pages
+/*Method : Get
+  Displaying all AdminPages*/
 router.get('/',async(req,res)=>{
      let Allpages = await pages.find({});
     // console.log(Allpages)
