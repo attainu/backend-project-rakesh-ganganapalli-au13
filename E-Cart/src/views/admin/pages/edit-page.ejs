@@ -5,7 +5,7 @@
 
 
 
-<form method="POST" action="/api/admin/pages/add-page/">
+<form method="POST" action="/api/admin/pages/edit-page/<= slug %>">
 
    
     <div class="form-group">
@@ -21,9 +21,11 @@
     
     <div class="form-group">
         <label for="contant">Contant</label>
-        <textarea name="contant" cols="20" rows="10" value="<%=contant%>" placeholder="Enter contant" class="form-control"></textarea>
+        <textarea name="contant" cols="20" rows="10" placeholder="Enter contant" class="form-control"><%=contant%></textarea>
         
     </div>
+
+    <input type="hidden" name = 'id' value="<%= id %>">
     
     <button class="btn btn-primary">Submit</button> 
    

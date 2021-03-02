@@ -9,8 +9,9 @@ const { checkBody, validationResult } = require("express-validator");
 
 
 //displaying the all pages
-router.get('/',(req,res)=>{
-    let Allpages = pages.find({});
+router.get('/',async(req,res)=>{
+     let Allpages = await pages.find({});
+    // console.log(Allpages)
     res.render('admin/pages/pages',{Allpages : Allpages,error : ''});
 })
 
@@ -40,7 +41,7 @@ router.get('/add-page',(req,res)=>{
 /*Method : Post
 adding a page*/
 
-router.post('/add-page',(req,res)=>{
+router.post('/add-page',async(req,res)=>{
 
     req.checkBody('title','please enter title').notEmpty()
     req.checkBody('contant','please enter contant').notEmpty()
@@ -66,7 +67,7 @@ if(errors.length){
     return res.render('admin/pages/add-page',data)
 }else{
 
-pages.findOne({slug : slug},(err,page)=>{
+await pages.findOne({slug : slug},(err,page)=>{
 
     if(page){
         // req.flash('danger','page already exists')
@@ -108,11 +109,10 @@ pages.findOne({slug : slug},(err,page)=>{
 /*Method : Get
 edit a page*/
 
-router.get('/edit-page/:slug',(req,res)=>{
+router.get('/edit-page/:slug',async(req,res)=>{
 
-    pages.findOne({slug:req.params.slug},(err,page)=>{
+    await pages.findOne({slug:req.params.slug},(err,page)=>{
         if(err) return consolog(err);
-
         let data = {
             id      : page._id,
             title   : page.title,
@@ -129,6 +129,105 @@ router.get('/edit-page/:slug',(req,res)=>{
 
 
 
+/* Edit(update) page
+Method : Post*/
+
+router.post('/edit-page/:slug',async(req,res)=>{
+
+    req.checkBody('title','please enter title').notEmpty(),
+    req.checkBody('contant','please enter contant').notEmpty()
+
+        let title = req.body.title;
+        let slug = req.body.slug.replace(/\s+/g,'-').toLowerCase();
+        if(slug=='') slug = title.replace(/\s+/g,'-').toLowerCase();
+        let contant = req.body.contant
+        let id      = req.body.id
+
+        const errors = req.validationErrors()
+    // console.log(errors)
+
+    if(errors.length){
+
+        const data = {
+            id       : id,
+            title    : title,
+            slug     : slug,
+            contant  : contant,
+            error    : errors
+        }
+        // console.log(data.error)
+        return res.render('admin/pages/edit-page',data)
+    }else{
+
+    await pages.findOne({slug : slug, _id :{$ne : id}},(err,page)=>{
+
+        if(page){
+            const data = {
+                id       : id,
+                title    : title,
+                slug     : slug,
+                contant  : contant,
+                error    : [{msg:'page already exist'}]
+            }
+
+            return res.render('admin/pages/edit-page',data)
+            
+        }else{
+
+         pages.findById(id,(err,page)=>{
+
+                if(err) return console.log(err)
+
+                page.title    = title
+                page.slug     = slug
+                page.contant  = contant
+           
+        page.save((err)=>{
+                if(err) return console.log(err)
+
+                // req.flash('sucess','page updated sucessfully')
+                res.redirect('/api/admin/pages')
+            })
+        })
+    }
+
+
+
+
+    })
+
+}
+
+})
+
+
+
+
+
+/* Method : Post
+delete page*/
+
+router.get('/delete-page/:id',async(req,res)=>{
+
+    await pages.findByIdAndDelete({_id : req.params.id}, (err)=>{
+
+        if(err) return console.log(err)
+
+        //for frontend auto update pages without server restarting,if you cant use this then you can restart server when you made changes in backend to reflect in frontend
+        pages.find({},(err,page)=>{
+            if(err) return console.log(err);
+        
+            req.app.locals.pages = page;
+        })
+        
+        
+        // req.flash('sucess','page deleted')
+        res.redirect( '/api/admin/pages')
+
+    })
+
+    
+})
 
 
 
