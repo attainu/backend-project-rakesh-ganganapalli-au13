@@ -2,12 +2,21 @@ const express    = require("express");
 const path             = require('path');
 require("dotenv").config({path : path.join(__dirname,'.env')});
 const app = express();
+const expressValidator = require('express-validator')
 
 
 const DBconnection        =  require("./config/db");
 
 //database connection
 DBconnection();
+
+
+//bodyparser/express-parser setup
+app.use(express.json());
+app.use(express.urlencoded({extended:true}))
+
+
+app.use(expressValidator())
 
 
 //view engine setup
