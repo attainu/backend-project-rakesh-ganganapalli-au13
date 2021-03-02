@@ -24,9 +24,16 @@ app.get('/',(req,res)=>{
 });
 
 
+const adminPages = require('./routes/adminPages');
+
+
+app.use('/api/admin/pages',adminPages)
 
 
 
 app.listen(process.env.PORT,()=>{
     console.log(`server starting at ${process.env.PORT}`);
 });
+
+
+
