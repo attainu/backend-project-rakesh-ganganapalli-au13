@@ -22,4 +22,12 @@
 </nav>
   
 <div class="container">
+  <% if(error.length) { %> 
+    <% error.forEach(function(err){ %>
+      <div class="alert alert-danger">
+        <%= err.msg %>
+      </div>
+   <% }); %>
+  <% } %>
+  
 

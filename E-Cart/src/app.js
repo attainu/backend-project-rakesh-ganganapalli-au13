@@ -27,10 +27,6 @@ app.set('view engine','ejs');
 
 
 
-//basic route
-app.get('/',(req,res)=>{
-    res.render('layouts/adminHeader');
-});
 
 
 const adminPages = require('./routes/adminPages');
