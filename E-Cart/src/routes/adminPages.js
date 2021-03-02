@@ -213,16 +213,6 @@ router.get('/delete-page/:id',async(req,res)=>{
     await pages.findByIdAndDelete({_id : req.params.id}, (err)=>{
 
         if(err) return console.log(err)
-
-        //for frontend auto update pages without server restarting,if you cant use this then you can restart server when you made changes in backend to reflect in frontend
-        pages.find({},(err,page)=>{
-            if(err) return console.log(err);
-        
-            req.app.locals.pages = page;
-        })
-        
-        
-        // req.flash('sucess','page deleted')
         res.redirect( '/api/admin/pages')
 
     })
