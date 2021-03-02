@@ -17,6 +17,28 @@
            <th>Delete</th>
          </tr>
        </thead>
+       <tbody>
+        <% if(Allpages.length) {%>
+        <% Allpages.forEach((page)=>{ %>
+
+            <tr>
+                <td><%= page.title %> </td>
+                <td><a href='/api/admin/pages/edit-page/<%= page.slug %>'>Edit</a></td>
+
+                <% if(page.slug == 'home'){%>
+                    <td></td>
+                <%}else {%>
+                    <td><a href='/api/admin/pages/delete-page/<%= page._id %>'>Delete</a></td>
+
+                <% } %>
+
+            </tr>
+
+        <% })  %>
+    </tbody>
+    <%}%>
+</table>
+
     </table>
 
 

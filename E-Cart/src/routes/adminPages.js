@@ -1,12 +1,33 @@
 const router = require('express').Router();
 
-// const pages = require('../models/adminPages')
+const pages = require('../models/adminPages')
 
 
-
+//displaying the all pages
 router.get('/',(req,res)=>{
-    res.render('admin/pages')
+
+    let Allpages = pages.find({});
+    res.render('admin/pages',{Allpages});
 })
+
+//adding a page 
+router.get('/add-page',(req,res)=>{
+    res.render('admin/add-page')
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports = router;
