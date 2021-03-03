@@ -30,9 +30,11 @@ app.set('view engine','ejs');
 
 
 const adminPages = require('./routes/adminPages');
+const  adminCategories = require('./routes/adminCategories')
 
 
 app.use('/api/admin/pages',adminPages)
+app.use('/api/admin/categories',adminCategories)
 
 
 

@@ -11,9 +11,14 @@ const pages = require('../models/adminPages');
 /*Method : Get
   Displaying all AdminPages*/
 router.get('/',async(req,res)=>{
+
      let Allpages = await pages.find({});
     // console.log(Allpages)
-    res.render('admin/pages/pages',{Allpages : Allpages,error : ''});
+    const data ={ 
+        Allpages : Allpages,
+        error    : ''
+    }
+    res.render('admin/pages/pages',data);
 })
 
 
@@ -48,12 +53,14 @@ router.post('/add-page',async(req,res)=>{
     req.checkBody('contant','please enter contant').notEmpty()
 
     let title    = req.body.title;
+
     let slug     = req.body.slug.replace(/\s+/g,'-').toLowerCase();
     if(slug=='') slug = title.replace(/\s+/g,'-').toLowerCase();
+    // console.log(slug)
     let contant  = req.body.contant
 
     const errors = req.validationErrors()
-// console.log(errors)
+    // console.log(errors)
 
 if(errors.length){
 
@@ -107,6 +114,7 @@ await pages.findOne({slug : slug},(err,page)=>{
 
 
 
+
 /*Method : Get
 edit a page*/
 
@@ -125,6 +133,8 @@ router.get('/edit-page/:slug',async(req,res)=>{
     })
 
 })
+
+
 
 
 
@@ -175,7 +185,7 @@ router.post('/edit-page/:slug',async(req,res)=>{
             
         }else{
 
-         pages.findById(id,(err,page)=>{
+        pages.findById(id,(err,page)=>{
 
                 if(err) return console.log(err)
 
