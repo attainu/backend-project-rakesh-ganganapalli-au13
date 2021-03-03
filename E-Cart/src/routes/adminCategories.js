@@ -187,20 +187,15 @@ await categories.findOne({slug : slug},(err,category)=>{
 
 
 /*Method : Get 
-  getting edit categories*/ 
-  router.get('/edit-category/:slug',async (req,res)=>{
-    //   console.log(req.url)
+  getting delete categories*/ 
+  
+  router.get('/delete-category/:id',async (req,res)=>{
 
-    await categories.find({slug:req.params.slug},(err,cat)=>{
-        // console.log(cat[0].title)
+    await categories.findByIdAndDelete({_id : req.params.id},(err,cat)=>{
+        
         if(err) return console.log(err)
-        const data = {
-            id    : cat[0]._id,
-            title : cat[0].title,
-            slug  : cat[0].slug,
-            error : ''
-        }
-        res.render('admin/categories/edit-category',data)
+        
+        res.redirect('/api/admin/categories/')
 
 
     })
