@@ -187,18 +187,18 @@ router.post('/edit-page/:slug',async(req,res)=>{
 
         pages.findById(id,(err,page)=>{
 
-                if(err) return console.log(err)
+            if(err) return console.log(err)
 
-                page.title    = title
-                page.slug     = slug
-                page.contant  = contant
-           
-        page.save((err)=>{
-                if(err) return console.log(err)
+            page.title    = title
+            page.slug     = slug
+            page.contant  = contant
+        
+            page.save((err)=>{
+                    if(err) return console.log(err)
 
-                // req.flash('sucess','page updated sucessfully')
-                res.redirect('/api/admin/pages')
-            })
+                    // req.flash('sucess','page updated sucessfully')
+                    res.redirect('/api/admin/pages')
+                })
         })
     }
 
