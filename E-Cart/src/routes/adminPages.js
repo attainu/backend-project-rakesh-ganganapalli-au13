@@ -51,7 +51,7 @@ router.post('/add-page',async(req,res)=>{
 
     req.checkBody('title','please enter title').notEmpty()
     req.checkBody('contant','please enter contant').notEmpty()
-
+    console.log(req.body)
     let title    = req.body.title;
 
     let slug     = req.body.slug.replace(/\s+/g,'-').toLowerCase();
