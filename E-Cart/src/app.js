@@ -4,6 +4,7 @@ require("dotenv").config({path : path.join(__dirname,'.env')});
 const app = express();
 const expressValidator = require('express-validator');
 const DBconnection        =  require("./config/db");
+const session          = require("express-session");
 
 
 
@@ -21,6 +22,9 @@ app.use(express.urlencoded({extended:true}));
 //express validator middlewere
 app.use(expressValidator());
 
+
+//static file setup
+app.use(express.static(path.join(__dirname, "public")));
 
 
 //view engine setup
@@ -50,6 +54,13 @@ app.use(expressValidator({
 
 
 
+//express-sessions Middle were 
+app.use(session({
+    secret:"keyboard cat",
+    resave : false,
+    saveUninitialized : true,
+    cookie :{secure:false}
+}));
 
 
 

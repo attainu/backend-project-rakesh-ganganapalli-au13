@@ -1,9 +1,10 @@
-const router = require("express").Router();
-const multer = require("multer");
-const products = require('../models/adminProducts');
+const router     = require("express").Router();
+const multer     = require("multer");
+const products   = require('../models/adminProducts');
 const categories = require('../models/adminCategories')
 const cloudinary = require('../config/cloudinary');
-const path = require("path");
+const path       = require("path");
+const fs         = require('fs')
 
 const upload = multer({
     storage: multer.diskStorage({})
@@ -27,11 +28,13 @@ router.get('/',async (req,res)=>{
 
     await products.find((err,product)=>{
         if (err) return console.log(err);
+        // console.log(product)
         let data ={
             products : product,
             count    : count,
             error    : ''
         };
+      
     
         res.render('admin/products/products',data);
     })
@@ -46,6 +49,8 @@ router.get('/',async (req,res)=>{
 add  products*/
 
 router.get('/add-product',async (req,res)=>{
+
+    // console.log(result.secure_url)
 
     categories.find({},(err,categories)=>{
 
@@ -73,10 +78,10 @@ router.get('/add-product',async (req,res)=>{
 add  products*/
 
 
-router.post('/add-product',upload.single('image'),(req,res)=>{
+router.post('/add-product',upload.single('image'),async(req,res)=>{
 
-      //checking image file is undefined or not
-    // console.log(req.file,req.body)
+    //   checking image file is undefined or not
+    console.log(req.file)
     if(!req.file){ imgFile =""; }
 
     if(req.file){
@@ -90,7 +95,8 @@ router.post('/add-product',upload.single('image'),(req,res)=>{
     req.checkBody('price',       'please enter the price').isDecimal()
     req.checkBody('discription', 'please enter discription').notEmpty()
     req.checkBody('category',    'please enter the category').notEmpty()
-    req.checkBody('image',        'please upload valid image file').isImage(imgFile)
+    if(req.file)
+        req.checkBody('image',        'please upload valid image file').isImage(imgFile)
 
     let errors = req.validationErrors();
    
@@ -106,7 +112,7 @@ router.post('/add-product',upload.single('image'),(req,res)=>{
 
     if(errors.length){
 
-        categories.find((err,categories)=>{
+        await categories.find((err,categories)=>{
             let data = {
                 title       : title,
                 category    : categories,
@@ -120,12 +126,12 @@ router.post('/add-product',upload.single('image'),(req,res)=>{
         })
     }else{
 
-        products.findOne({slug : slug},(err,product)=>{
+        products.findOne({slug : slug},async(err,product)=>{
 
             if(err) return console.log(err);
 
             if(product){
-                categories.find((err,categories)=>{
+               await categories.find((err,categories)=>{
 
                     if(err) return console.log(err);
 
@@ -141,21 +147,40 @@ router.post('/add-product',upload.single('image'),(req,res)=>{
                 })
             
             }else{
+
+              
+                
+
         
-                let price2 =parseFloat(price).toFixed(2);
+                let price2 = parseFloat(price).toFixed(2);
+
                 const product = new products({
+                
                     title         : title,
                     slug          : slug,
                     price         : price2,
                     discription   : discription,
                     category      : category,
-                    image         : imgFile
+                    image         : imgFile,
+                    product_url   : '',
                 })
 
-                product.save(async(err)=>{
-                    if(err) return console.log(err);
+                // console.log(product)
+                if(req.file){
 
-                     await cloudinary.uploader.upload(req.file.path);
+                    var result = await cloudinary.uploader.upload(req.file.path, {folder:"product_images/" + product._id});
+
+                    console.log(166,result.secure_url)
+                };
+                
+                product.product_url = result.secure_url;
+
+                    // console.log(product)
+                
+
+                product.save(async(err)=>{
+
+                    if(err) return console.log(err);
 
                      res.redirect('/api/admin/products')
 
@@ -171,6 +196,47 @@ router.post('/add-product',upload.single('image'),(req,res)=>{
 
 
 
+/*Method : Get
+edit  products*/
+
+router.get('/edit-product/:id',(req,res)=>{
+
+    let error;
+    if(req.session.errors) error = req.session.errors;
+    req.session.errors = null;
+    // console.log(191,req.session.errors)
+
+
+
+    categories.find((err,categories)=>{
+
+        if(err) return console.log(err);
+
+        products.findById(req.params.id,(err,p)=>{
+
+            if(err){ 
+                
+                console.log(err);
+                return res.redirect('/api/admin/products');
+
+            }else{
+
+                    let data = {
+                        title         : p.title,
+                        category      : categories,
+                        category2     : p.category.replace(/\s+/g,'-').toLowerCase(),//for checking category is == pevious category or not if page edit(it used in edit.ejs)
+                        price         : parseFloat(p.price).toFixed(2),
+                        discription   : p.discription,
+                        image         : p.image,
+                        error         : '',
+                        id            : p._id
+                    }
+                    res.render('admin/products/edit-product',data)
+                
+            }
+        })
+    })
+})
 
 
 
@@ -182,3 +248,5 @@ router.post('/add-product',upload.single('image'),(req,res)=>{
 
 
 module.exports = router;
+
+

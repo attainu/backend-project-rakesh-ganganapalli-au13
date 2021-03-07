@@ -2,10 +2,10 @@
 
 
 
-<h2 class="product-title">Add a new product</h2>
+<h2 class="page-title">Edit product</h2>
 <a href="/api/admin/products" class="btn btn-primary">Back to All products</a>
 
-<form method="POST" action="/api/admin/products/add-product" enctype="multipart/form-data">
+<form method="POST" action=" /api/admin/products/edit-product/<%= id %>" enctype="multipart/form-data">
 
     <div class="form-group">
         <label for="title">Title</label>
@@ -19,43 +19,35 @@
 
     <div class="form-group">
         <label for="Discription">Discription</label>
-        <textarea name="discription" cols="20" rows="10"  placeholder="Enter description" class="form-control"><%=discription%></textarea>
+        <textarea name="discription" cols="20" rows="10"  placeholder="Enter description" class="form-control"> <%= discription %></textarea>
     </div>
 
     <div class="form-group">
         <label for="Category">Category</label>
         <select name="category" class="form-control">
             <% category.forEach((cat)=> { %>
+
                 <option value="<%= cat.slug %>"><%= cat.slug %></option>
+
+                <% if (cat.slug == category2) { %>
+                    selected : "selected"
+                <% } %>
+
             <% }) %>
         </select>
     </div>
 
     <div class="form-group">
-       <label for="image">Image</label>
-       <input type='file' name="image" onchange="readLiveURL(this);"  class="form-control" />
-       <img id="livepreview" src="#" alt=" image " />
-    </div>
+        <label for="image">Upload Image</label>
+        <input type="file" name="image" class="form-control"  >
+        <img src="#"  alt="">
+     </div>
 
+    <input type="hidden" name = 'pimage' value="<%= image %>">
+    
     <button>Submit</button> 
    
 </form>
-
-<!-- preview the image  -->
-<script>
-    function readLiveURL(input) {
-            if (input.files && input.files[0]) {
-                var filereader = new FileReader();
-                filereader.onload = function (e) {
-                    $('#livepreview')
-                        .attr('src', e.target.result)
-                        .width(100)
-                        .height(100);
-                };
-                filereader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
 
 
 
