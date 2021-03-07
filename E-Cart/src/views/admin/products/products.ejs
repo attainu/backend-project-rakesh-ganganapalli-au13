@@ -25,14 +25,14 @@
                     <td> <%= product.title %> </td>
                     <td> <%= product.category %> </td>
                     <td> $<%= parseFloat(product.price).toFixed(2) %> </td>
-                    <!-- <td> <%= product.image %> </td> -->
+
                     <td> <% if(product.image == '') { %> 
 
                            <img src="/images/Noimg.jpg" alt="no image" width="100px" height="100px">
                     
                         <%} else {%>
 
-                            <img src="<%=product.product_url%>" alt="no image" width="100px" height="100px">
+                            <img src="<%=product.img_url%>" alt="no image" width="100px" height="100px">
 
 
                        <%}%>

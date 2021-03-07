@@ -3,8 +3,8 @@ const multer     = require("multer");
 const products   = require('../models/adminProducts');
 const categories = require('../models/adminCategories')
 const cloudinary = require('../config/cloudinary');
-const path       = require("path");
-const fs         = require('fs')
+// const path       = require("path");
+// const fs         = require('fs')
 
 const upload = multer({
     storage: multer.diskStorage({})
@@ -62,6 +62,7 @@ router.get('/add-product',async (req,res)=>{
             price : '',
             discription : '',
             image : '',
+            img_url : '',
             error  : ''
         }
 
@@ -81,7 +82,7 @@ add  products*/
 router.post('/add-product',upload.single('image'),async(req,res)=>{
 
     //   checking image file is undefined or not
-    console.log(req.file)
+    // console.log(req.file)
     if(!req.file){ imgFile =""; }
 
     if(req.file){
@@ -112,7 +113,10 @@ router.post('/add-product',upload.single('image'),async(req,res)=>{
 
     if(errors.length){
 
-        await categories.find((err,categories)=>{
+        await categories.find(async(err,categories)=>{
+
+            if(err) return console.log(err);
+
             let data = {
                 title       : title,
                 category    : categories,
@@ -126,7 +130,7 @@ router.post('/add-product',upload.single('image'),async(req,res)=>{
         })
     }else{
 
-        products.findOne({slug : slug},async(err,product)=>{
+        await products.findOne({slug : slug},async(err,product)=>{
 
             if(err) return console.log(err);
 
@@ -162,18 +166,21 @@ router.post('/add-product',upload.single('image'),async(req,res)=>{
                     discription   : discription,
                     category      : category,
                     image         : imgFile,
-                    product_url   : '',
+                    img_url       : '',
                 })
 
                 // console.log(product)
                 if(req.file){
 
-                    var result = await cloudinary.uploader.upload(req.file.path, {folder:"product_images/" + product._id});
+                    var result = await cloudinary.uploader.upload(req.file.path, {folder:"product_images/" + product._id });
 
-                    console.log(166,result.secure_url)
+                    // console.log(177,result.secure_url);
+
+                    product.img_url = result.secure_url;
+                    product.cloudinary_id = result.public_id;
                 };
                 
-                product.product_url = result.secure_url;
+                
 
                     // console.log(product)
                 
@@ -199,7 +206,7 @@ router.post('/add-product',upload.single('image'),async(req,res)=>{
 /*Method : Get
 edit  products*/
 
-router.get('/edit-product/:id',(req,res)=>{
+router.get('/edit-product/:id',async(req,res)=>{
 
     let error;
     if(req.session.errors) error = req.session.errors;
@@ -208,11 +215,11 @@ router.get('/edit-product/:id',(req,res)=>{
 
 
 
-    categories.find((err,categories)=>{
+    await categories.find(async(err,categories)=>{
 
         if(err) return console.log(err);
 
-        products.findById(req.params.id,(err,p)=>{
+        await products.findById(req.params.id,(err,p)=>{
 
             if(err){ 
                 
@@ -220,7 +227,7 @@ router.get('/edit-product/:id',(req,res)=>{
                 return res.redirect('/api/admin/products');
 
             }else{
-
+                    // console.log(223,categories)
                     let data = {
                         title         : p.title,
                         category      : categories,
@@ -228,6 +235,7 @@ router.get('/edit-product/:id',(req,res)=>{
                         price         : parseFloat(p.price).toFixed(2),
                         discription   : p.discription,
                         image         : p.image,
+                        img_url       : p.img_url,
                         error         : '',
                         id            : p._id
                     }
@@ -239,6 +247,112 @@ router.get('/edit-product/:id',(req,res)=>{
 })
 
 
+
+
+
+/*Method : post
+edit  products*/
+
+router.post('/edit-product/:id',upload.single('image'),async(req,res)=>{
+
+
+    //checking image file is undefined or not
+    // console.log(req.file,req.body)
+    if(!req.file){ imgFile =""; }
+
+    if(req.file){
+        
+        var imgFile = typeof(req.file) !== "undefined" ? req.file.originalname : "";
+    }
+
+        
+ 
+    req.checkBody('title',      'please enter title').notEmpty()
+    req.checkBody('price',      'please enter the price').isDecimal()
+    req.checkBody('discription','please enter discription').notEmpty()
+    req.checkBody('category',   'please enter the category').notEmpty()
+    if(req.file)
+        req.checkBody('image',  'please upload valid image file').isImage(imgFile)
+
+    
+        let title       = req.body.title;
+        let slug        = title.replace(/\s+/g,'-').toLowerCase();
+        let price       = req.body.price 
+        let discription = req.body.discription
+        let category    = req.body.category
+        let id          = req.params.id
+
+        // console.log(req.body)
+    const errors = req.validationErrors()
+    // console.log(errors)
+
+   if(errors.length) {
+       
+       req.session.errors = errors ;
+       return res.redirect('/api/admin/products/edit-product/'+id)
+       
+
+   }else{
+       await products.findOne({slug:slug,_id : {'$ne' : id}},async(err,p)=>{
+
+           if(err) return console.log(err);
+
+           if(p){
+               console.log('product title exist')
+               res.redirect('/api/admin/products/edit-product/'+id)
+           }else{
+             await products.findById(id,async(err,p)=>{
+
+                   if(err) return console.log(err);
+
+                   p.title       = title
+                   p.slug        = slug
+                   p.discription = discription
+                   p.price       = parseFloat(price).toFixed(2)
+                   p.category    = category
+                   p.image       = imgFile
+
+                await cloudinary.uploader.destroy(p.cloudinary_id);
+                if(req.file){
+                   let result = await cloudinary.uploader.upload(req.file.path, {folder:"product_images/" + p._id });
+                   p.img_url   = result.secure_url;
+                   p.cloudinary_id = result.public_id
+                }
+                  
+                //    console.log(p)
+
+                   await p.save((err)=>{
+                       if(err) return console.log(err)    
+                       res.redirect('/api/admin/products')
+                   })
+
+               })
+           }
+       })
+   }
+
+})
+
+
+
+router.get('/delete-product/:id',async(req,res)=>{
+
+    let id = req.params.id;
+
+    let result = await products.findById(id);
+
+    console.log(result)
+    
+    await cloudinary.uploader.destroy(result.cloudinary_id);
+    // await cloudinary.uploader.destroy(result._id);
+
+
+    result.remove()
+
+    res.redirect('/api/admin/products')
+    
+
+})
 
 
 
