@@ -6,6 +6,8 @@ const expressValidator = require('express-validator');
 const DBconnection        =  require("./config/db");
 const session          = require("express-session");
 
+const PORT   =  process.env.PORT || 4000
+
 
 
 //database connection
@@ -88,8 +90,8 @@ app.use('/api/admin/products',adminProducts);
 
 
 //port setup
-app.listen(process.env.PORT,()=>{
-    console.log(`server starting at ${process.env.PORT}`);
+app.listen(PORT,()=>{
+    console.log(`server starting at ${PORT}`);
 });
 
 
