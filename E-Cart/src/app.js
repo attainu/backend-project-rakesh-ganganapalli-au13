@@ -6,7 +6,7 @@ const expressValidator = require('express-validator');
 const DBconnection        =  require("./config/db");
 const session          = require("express-session");
 
-const PORT   =  process.env.PORT || 4000
+const port   =  process.env.PORT || 4000
 
 
 
@@ -81,17 +81,51 @@ const  adminPages      = require('./routes/adminPages');
 const  adminCategories = require('./routes/adminCategories');
 const  adminProducts   = require('./routes/adminProducts');
 
+//user side
+const  userHome            = require('./routes/userSide/user')
 
 //routes middleweres
 app.use('/api/admin/pages',adminPages);
 app.use('/api/admin/categories',adminCategories);
 app.use('/api/admin/products',adminProducts);
 
+app.use('/api',userHome)
+
+
+
+
+
+
+//get page model for display pages in frontend
+const pages = require('./models/adminPages')
+
+//set all pages in header on frontend
+pages.find({},(err,page)=>{
+    if(err) return console.log(err);
+
+    app.locals.pages = page;
+})
+
+
+//get category model for shows categories on frontend
+const categories = require('./models/adminCategories')
+
+//set all categories in header on frontend
+categories.find({},(err,cat)=>{
+    if(err) return console.log(err);
+
+    app.locals.categories = cat;
+})
+
+
+
+
+
 
 
 //port setup
-app.listen(PORT,()=>{
-    console.log(`server starting at ${PORT}`);
+app.listen(port,()=>{
+    console.log(`server starting at ${port}`);
 });
 
 

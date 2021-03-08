@@ -51,16 +51,14 @@ router.post('/add-page',async(req,res)=>{
 
     req.checkBody('title','please enter title').notEmpty()
     req.checkBody('contant','please enter contant').notEmpty()
-    console.log(req.body)
     let title    = req.body.title;
 
     let slug     = req.body.slug.replace(/\s+/g,'-').toLowerCase();
     if(slug=='') slug = title.replace(/\s+/g,'-').toLowerCase();
-    // console.log(slug)
     let contant  = req.body.contant
 
     const errors = req.validationErrors()
-    // console.log(errors)
+    // console.log(req.body)
 
 if(errors.length){
 
@@ -78,7 +76,6 @@ if(errors.length){
 await pages.findOne({slug : slug},(err,page)=>{
 
     if(page){
-        // req.flash('danger','page already exists')
         const data = {
 
             title    : title,
@@ -97,6 +94,13 @@ await pages.findOne({slug : slug},(err,page)=>{
         page.save((err)=>{
 
             if(err) return console.log(err)
+
+            //for fentend auto update pages when reload without server
+            pages.find({},(err,page)=>{
+                if(err) return console.log(err);
+            
+                req.app.locals.pages = page;
+            })
 
             res.redirect('/api/admin/pages')
         })
@@ -140,8 +144,8 @@ router.get('/edit-page/:slug',async(req,res)=>{
 
 
 
-/* Edit(update) page
-Method : Post*/
+/* Method : Post
+Edit(update) page*/
 
 router.post('/edit-page/:slug',async(req,res)=>{
 
@@ -196,7 +200,13 @@ router.post('/edit-page/:slug',async(req,res)=>{
             page.save((err)=>{
                     if(err) return console.log(err)
 
-                    // req.flash('sucess','page updated sucessfully')
+                    //for fentend auto update pages when reload without server
+                    pages.find({},(err,page)=>{
+                        if(err) return console.log(err);
+                    
+                        req.app.locals.pages = page;
+                    })
+                    
                     res.redirect('/api/admin/pages')
                 })
         })
@@ -223,6 +233,14 @@ router.get('/delete-page/:id',async(req,res)=>{
     await pages.findByIdAndDelete({_id : req.params.id}, (err)=>{
 
         if(err) return console.log(err)
+
+        //for fentend auto update pages when reload without server
+        pages.find({},(err,page)=>{
+            if(err) return console.log(err);
+        
+            req.app.locals.pages = page;
+        })
+
         res.redirect( '/api/admin/pages')
 
     })
