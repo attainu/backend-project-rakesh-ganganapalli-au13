@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const pages = require('../models/adminPages');
+const pages = require('../../models/adminPages');
 
 
 

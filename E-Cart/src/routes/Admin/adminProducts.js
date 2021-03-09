@@ -1,8 +1,8 @@
 const router     = require("express").Router();
 const multer     = require("multer");
-const products   = require('../models/adminProducts');
-const categories = require('../models/adminCategories')
-const cloudinary = require('../config/cloudinary');
+const products   = require('../../models/adminProducts');
+const categories = require('../../models/adminCategories')
+const cloudinary = require('../../config/cloudinary');
 // const path       = require("path");
 // const fs         = require('fs')
 
@@ -202,7 +202,6 @@ router.post('/add-product',upload.single('image'),async(req,res)=>{
 })
 
 
-
 /*Method : Get
 edit  products*/
 
@@ -245,8 +244,6 @@ router.get('/edit-product/:id',async(req,res)=>{
         })
     })
 })
-
-
 
 
 
@@ -335,13 +332,15 @@ router.post('/edit-product/:id',upload.single('image'),async(req,res)=>{
 
 
 
+/*Method : Get
+delete  products*/
 router.get('/delete-product/:id',async(req,res)=>{
 
     let id = req.params.id;
 
     let result = await products.findById(id);
 
-    console.log(result)
+    // console.log(result)
     
     await cloudinary.uploader.destroy(result.cloudinary_id);
     // await cloudinary.uploader.destroy(result._id);
@@ -353,9 +352,6 @@ router.get('/delete-product/:id',async(req,res)=>{
     
 
 })
-
-
-
 
 
 

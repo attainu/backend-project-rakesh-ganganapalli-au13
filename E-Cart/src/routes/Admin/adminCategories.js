@@ -1,6 +1,10 @@
 const router = require("express").Router();
 
-const categories = require('../models/adminCategories');
+const categories = require('../../models/adminCategories');
+
+const products   = require('../../models/adminProducts');
+
+const cloudinary = require('../../config/cloudinary');
 
 /*Method : Post 
   getting all categories*/ 
@@ -200,15 +204,22 @@ await categories.findOne({slug : slug},(err,category)=>{
 
 
 /*Method : Get 
-  getting delete categories*/ 
+  delete categories*/ 
   
-  router.get('/delete-category/:id',async (req,res)=>{
+router.get('/delete-category/:id',async (req,res)=>{
 
-    await categories.findByIdAndDelete({_id : req.params.id},async(err,cat)=>{
-        
-        if(err) return console.log(err)
+    categories.findByIdAndDelete({_id : req.params.id},async(e,r)=>{
+            products.find({category:r.slug},async(err,p)=>{
 
-         //for update the categories on user end
+                for (i=0;i<p.length;i++){
+                    await cloudinary.uploader.destroy(p[i].cloudinary_id);
+                }
+            })
+
+            products.deleteMany({category:r.slug},async(err,p)=>{
+            })
+
+        //for update the categories on user end
          await categories.find({},(err,cat)=>{
             if(err) return console.log(err);
             req.app.locals.categories = cat;
@@ -217,10 +228,10 @@ await categories.findOne({slug : slug},(err,category)=>{
         res.redirect('/api/admin/categories/')
 
 
-    })
-
-
-
+    });
+    
+         
+         
    
 });
 

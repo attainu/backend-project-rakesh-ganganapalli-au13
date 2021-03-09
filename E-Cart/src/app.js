@@ -68,13 +68,13 @@ app.use(session({
 
 
 //importing thr routes
-const  adminPages      = require('./routes/adminPages');
-const  adminCategories = require('./routes/adminCategories');
-const  adminProducts   = require('./routes/adminProducts');
+const  adminPages      = require('./routes/Admin/adminPages');
+const  adminCategories = require('./routes/Admin/adminCategories');
+const  adminProducts   = require('./routes/Admin/adminProducts');
 
 //user side
 const  userHome         = require('./routes/userSide/pages')
-const  userCategories   = require('./routes/userSide/categories')
+const  userProducts   = require('./routes/userSide/products')
 
 //routes middleweres
 app.use('/api/admin/pages',adminPages);
@@ -82,7 +82,7 @@ app.use('/api/admin/categories',adminCategories);
 app.use('/api/admin/products',adminProducts);
 
 app.use('/api',userHome);
-app.use('/api/user/categories',userCategories);
+app.use('/api/user',userProducts);
 
 
 

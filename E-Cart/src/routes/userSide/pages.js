@@ -5,11 +5,12 @@ const pages  = require('../../models/adminPages')
 /*Method :Get
 getting user page*/
 router.get("/user",(req,res)=>{
-    let data = {
-        title : "Home",
-        contant : "hello users!!welcome to our website,we have great deales for you!!Happy shoping."
-    }
-    res.render('user/homepage',data)
+    // let data = {
+    //     title : "Home",
+    //     contant : "hello users!!welcome to our website,we have great deales for you!!Happy shoping."
+    // }
+    // res.render('user/homepage',data)
+    res.redirect('/api/user/Allproducts')
 });
 
 
