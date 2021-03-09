@@ -26,8 +26,32 @@
       <%}%>
       
       <% }) %>
+    </ul >
 
-    </ul>
+
+        <ul class="nav navbar-nav navbar-right">          <!--for display products length in cart-->
+          <li><a href="/">SignUp</a></li>
+          <li><a href="/api/user/login">Login</a></li>
+          <li>
+            <a href="/api/cart/checkout">My Cart(
+
+              <%console.log(typeof cart) %>
+    
+              <% if (typeof cart != 'undefined' ) {%>
+    
+                <%= cart.length %>
+
+               
+    
+              <%}else{%>
+                    0
+            <%}%>
+            )</a>
+          </li>
+         
+        </ul>
+    
+    
   
   </div>
 

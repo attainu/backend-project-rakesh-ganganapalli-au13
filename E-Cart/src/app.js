@@ -6,7 +6,7 @@ const expressValidator  = require('express-validator');
 const DBconnection      =  require("./config/db");
 const session           = require("express-session");
 
-const port   =  process.env.PORT || 4000
+const port              =  process.env.PORT || 4000
 
 
 
@@ -67,22 +67,22 @@ app.use(session({
 
 
 
-//importing thr routes
+//importing the admin side routes
 const  adminPages      = require('./routes/Admin/adminPages');
 const  adminCategories = require('./routes/Admin/adminCategories');
 const  adminProducts   = require('./routes/Admin/adminProducts');
-
-//user side
-const  userHome         = require('./routes/User/pages')
-const  userProducts   = require('./routes/User/products')
+//importing user side routes
+const  userHome        = require('./routes/User/pages');
+const  userProducts    = require('./routes/User/products');
+const  userCart        = require('./routes/User/cart')
 
 //routes middleweres
 app.use('/api/admin/pages',adminPages);
 app.use('/api/admin/categories',adminCategories);
 app.use('/api/admin/products',adminProducts);
-
 app.use('/api',userHome);
 app.use('/api/user',userProducts);
+app.use('/api/cart',userCart)
 
 
 
@@ -116,6 +116,11 @@ const category = async()=>{await categories.find({},(err,cat)=>{
 category()
 
 
+app.get('*',(req,res,next)=>{
+    console.log(req.session.cart)
+    res.locals.cart = req.session.cart
+    next()
+})
 
 
 
