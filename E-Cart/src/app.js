@@ -107,6 +107,7 @@ pages.find({},(err,page)=>{
 })
 
 
+
 //get category model for shows categories on frontend
 const categories = require('./models/adminCategories')
 
