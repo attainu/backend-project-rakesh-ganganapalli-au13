@@ -116,6 +116,7 @@ categories.find({},(err,cat)=>{
     if(err) return console.log(err);
 
     app.locals.categories = cat;
+    
 })
 
 
