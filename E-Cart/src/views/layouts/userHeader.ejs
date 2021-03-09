@@ -31,6 +31,28 @@
 </nav>
 
 <div class="container">
+
+  <div class="row">
+
+    <div class="col-xs-12 col-md-3">
+
+      <h3>Catgories</h3>
+
+      <ul class="list-group">
+        <li class="list-group-item"><a href="/api/products/view">All products</a></li>
+        <% categories.forEach((cat)=>{ %>
+
+          <li class="list-group-item"><a href="/api/products/<%= cat.slug %>"><%= cat.title %></a></li>
+
+      <% }) %>
+      </ul>
+
+
+    </div>
+
+  <div class="col-xs-12 col-md-1"></div>
+
+  <div class="col-xs-12 col-md-8">
   
   
   

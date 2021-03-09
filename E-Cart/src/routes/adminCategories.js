@@ -77,14 +77,20 @@ await categories.findOne({slug : slug},(err,category)=>{
             title    : title,
             slug     : slug
         })
-        category.save((err)=>{
+        category.save(async(err)=>{
 
-            if(err) return console.log(err)
+            if(err) return console.log(err);
 
-            res.redirect('/api/admin/categories')
+            //for update the categories on user end
+            await categories.find({},(err,cat)=>{
+                if(err) return console.log(err);
+                req.app.locals.categories = cat;
+                });
+
+            res.redirect('/api/admin/categories');
         })
     }
-})
+});
 
 
 
@@ -171,8 +177,15 @@ await categories.findOne({slug : slug},(err,category)=>{
                         category.title    = title
                         category.slug     = slug
                 
-                        category.save((err)=>{
+                        category.save(async(err)=>{
                         if(err) return console.log(err)
+
+                         //for update the categories on user end
+                        await categories.find({},(err,cat)=>{
+                            if(err) return console.log(err);
+                            req.app.locals.categories = cat;
+                            });
+
                         res.redirect('/api/admin/categories')
                         })
                     })
@@ -191,9 +204,15 @@ await categories.findOne({slug : slug},(err,category)=>{
   
   router.get('/delete-category/:id',async (req,res)=>{
 
-    await categories.findByIdAndDelete({_id : req.params.id},(err,cat)=>{
+    await categories.findByIdAndDelete({_id : req.params.id},async(err,cat)=>{
         
         if(err) return console.log(err)
+
+         //for update the categories on user end
+         await categories.find({},(err,cat)=>{
+            if(err) return console.log(err);
+            req.app.locals.categories = cat;
+            });
         
         res.redirect('/api/admin/categories/')
 
@@ -204,13 +223,6 @@ await categories.findOne({slug : slug},(err,category)=>{
 
    
 });
-
-
-
-
-
-
-
 
 
 

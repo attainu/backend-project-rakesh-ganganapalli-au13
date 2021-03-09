@@ -67,58 +67,53 @@ app.use(session({
 
 
 
-
-
-
-
-
-
-
-
-
 //importing thr routes
 const  adminPages      = require('./routes/adminPages');
 const  adminCategories = require('./routes/adminCategories');
 const  adminProducts   = require('./routes/adminProducts');
 
 //user side
-const  userHome            = require('./routes/userSide/user')
+const  userHome         = require('./routes/userSide/pages')
+const  userCategories   = require('./routes/userSide/categories')
 
 //routes middleweres
 app.use('/api/admin/pages',adminPages);
 app.use('/api/admin/categories',adminCategories);
 app.use('/api/admin/products',adminProducts);
 
-app.use('/api',userHome)
+app.use('/api',userHome);
+app.use('/api/user/categories',userCategories);
 
 
 
 
 
 
-//get page model for display pages in frontend
+//get page model for display pages in userend
 const pages = require('./models/adminPages')
 
-//set all pages in header on frontend
-pages.find({},(err,page)=>{
+//set all pages in header on userend
+const page = async()=>{ await pages.find({},(err,page)=>{
     if(err) return console.log(err);
 
     app.locals.pages = page;
-})
+})}
+
+page()
 
 
-
-//get category model for shows categories on frontend
+//get category model for shows categories on userend
 const categories = require('./models/adminCategories')
 
-//set all categories in header on frontend
-categories.find({},(err,cat)=>{
+//set all categories in header on userend
+const category = async()=>{await categories.find({},(err,cat)=>{
     if(err) return console.log(err);
 
     app.locals.categories = cat;
-    
-})
 
+})}
+
+category()
 
 
 
