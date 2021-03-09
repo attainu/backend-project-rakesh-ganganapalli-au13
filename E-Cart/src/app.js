@@ -1,10 +1,10 @@
-const express    = require("express");
+const express          = require("express");
 const path             = require('path');
 require("dotenv").config({path : path.join(__dirname,'.env')});
 const app = express();
-const expressValidator = require('express-validator');
-const DBconnection        =  require("./config/db");
-const session          = require("express-session");
+const expressValidator  = require('express-validator');
+const DBconnection      =  require("./config/db");
+const session           = require("express-session");
 
 const port   =  process.env.PORT || 4000
 
@@ -73,8 +73,8 @@ const  adminCategories = require('./routes/Admin/adminCategories');
 const  adminProducts   = require('./routes/Admin/adminProducts');
 
 //user side
-const  userHome         = require('./routes/userSide/pages')
-const  userProducts   = require('./routes/userSide/products')
+const  userHome         = require('./routes/User/pages')
+const  userProducts   = require('./routes/User/products')
 
 //routes middleweres
 app.use('/api/admin/pages',adminPages);

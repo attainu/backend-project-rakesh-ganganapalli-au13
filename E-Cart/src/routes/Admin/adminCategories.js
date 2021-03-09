@@ -1,4 +1,4 @@
-const router = require("express").Router();
+const router     = require("express").Router();
 
 const categories = require('../../models/adminCategories');
 
@@ -208,7 +208,7 @@ await categories.findOne({slug : slug},(err,category)=>{
   
 router.get('/delete-category/:id',async (req,res)=>{
 
-    categories.findByIdAndDelete({_id : req.params.id},async(e,r)=>{
+   categories.findByIdAndDelete({_id : req.params.id},async(e,r)=>{
             products.find({category:r.slug},async(err,p)=>{
 
                 for (i=0;i<p.length;i++){

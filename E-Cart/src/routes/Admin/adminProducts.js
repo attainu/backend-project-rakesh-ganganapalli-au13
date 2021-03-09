@@ -279,9 +279,9 @@ router.post('/edit-product/:id',upload.single('image'),async(req,res)=>{
         let category    = req.body.category
         let id          = req.params.id
 
-        // console.log(req.body)
-    const errors = req.validationErrors()
-    // console.log(errors)
+    
+    const errors = req.validationErrors();
+
 
    if(errors.length) {
        
@@ -343,7 +343,6 @@ router.get('/delete-product/:id',async(req,res)=>{
     // console.log(result)
     
     await cloudinary.uploader.destroy(result.cloudinary_id);
-    // await cloudinary.uploader.destroy(result._id);
 
 
     result.remove()
