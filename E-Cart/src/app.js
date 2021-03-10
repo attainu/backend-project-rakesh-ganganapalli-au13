@@ -66,6 +66,43 @@ app.use(session({
 
 
 
+//set up for cart 
+app.get('*',(req,res,next)=>{
+    // console.log(req.session.cart)
+    res.locals.cart = req.session.cart
+    next()
+})
+
+
+//get page model for display pages in userend
+const pages = require('./models/adminPages')
+
+//set all pages in header on userend
+const page = async()=>{ await pages.find({},(err,page)=>{
+    if(err) return console.log(err);
+
+    app.locals.pages = page;
+})}
+//calling page function
+page()
+
+
+//get category model for shows categories on userend
+const categories = require('./models/adminCategories')
+
+//set all categories in header on userend
+const category = async()=>{await categories.find({},(err,cat)=>{
+    if(err) return console.log(err);
+
+    app.locals.categories = cat;
+
+})}
+//calling category function
+category()
+
+
+
+
 
 //importing the admin side routes
 const  adminPages      = require('./routes/Admin/adminPages');
@@ -85,42 +122,6 @@ app.use('/api/user',userProducts);
 app.use('/api/cart',userCart)
 
 
-
-
-
-
-//get page model for display pages in userend
-const pages = require('./models/adminPages')
-
-//set all pages in header on userend
-const page = async()=>{ await pages.find({},(err,page)=>{
-    if(err) return console.log(err);
-
-    app.locals.pages = page;
-})}
-
-page()
-
-
-//get category model for shows categories on userend
-const categories = require('./models/adminCategories')
-
-//set all categories in header on userend
-const category = async()=>{await categories.find({},(err,cat)=>{
-    if(err) return console.log(err);
-
-    app.locals.categories = cat;
-
-})}
-
-category()
-
-
-app.get('*',(req,res,next)=>{
-    console.log(req.session.cart)
-    res.locals.cart = req.session.cart
-    next()
-})
 
 
 

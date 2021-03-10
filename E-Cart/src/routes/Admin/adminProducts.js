@@ -2,8 +2,6 @@ const router     = require("express").Router();
 const multer     = require("multer");
 const adminProductsController = require('../../controllers/Admin/adminProducts');
 
-// const path       = require("path");
-// const fs         = require('fs')
 
 const upload = multer({
     storage: multer.diskStorage({})
