@@ -14,10 +14,8 @@ router.get('/add-category',adminCategoriesController.getAddCategory);
 
 
 
-
 /*Method : Post
 adding a page*/
-
 router.post('/add-category',adminCategoriesController.postAddCategory);
 
 
@@ -31,7 +29,6 @@ router.post('/add-category',adminCategoriesController.postAddCategory);
 
 /*Method : Get 
   getting edit categories*/ 
-
   router.post('/edit-category/:slug',adminCategoriesController.postEditCategory);
 
 
@@ -39,7 +36,6 @@ router.post('/add-category',adminCategoriesController.postAddCategory);
 
 /*Method : Get 
   delete categories*/ 
-  
 router.get('/delete-category/:id',adminCategoriesController.getDeleteCategory);
 
 
