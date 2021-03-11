@@ -5,6 +5,7 @@ const app = express();
 const expressValidator  = require('express-validator');
 const DBconnection      =  require("./config/db");
 const session           = require("express-session");
+const cors              = require('cors')
 
 const port              =  process.env.PORT || 4000
 
@@ -64,6 +65,9 @@ app.use(session({
     cookie :{secure:false}
 }));
 
+//cors middlewere 
+app.use(cors())
+
 
 
 //set up for cart 
@@ -72,6 +76,7 @@ app.get('*',(req,res,next)=>{
     res.locals.cart = req.session.cart
     next()
 })
+
 
 
 //get page model for display pages in userend
@@ -111,16 +116,18 @@ const  adminProducts   = require('./routes/Admin/adminProducts');
 //importing user side routes
 const  userHome        = require('./routes/User/pages');
 const  userProducts    = require('./routes/User/products');
-const  userCart        = require('./routes/User/cart')
+const  userCart        = require('./routes/User/cart');
+
+const  userSignUp      = require('./routes/userSignUp_Login/signUp_Login')
 
 //routes middleweres
 app.use('/api/admin/pages',adminPages);
 app.use('/api/admin/categories',adminCategories);
 app.use('/api/admin/products',adminProducts);
-app.use('/api',userHome);
+app.use('/',userHome);
 app.use('/api/user',userProducts);
 app.use('/api/cart',userCart)
-
+app.use('/',userSignUp)
 
 
 

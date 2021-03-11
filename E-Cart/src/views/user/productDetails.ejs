@@ -11,11 +11,16 @@
 
     <p><%=product.discription%></p>
     <p>$<%=parseFloat(product.price).toFixed(2)%></p>
+
+
     <a href="/api/cart/add/<%=product.slug%>"><input type="button" value = "Add to cart" class="btn btn-primary"></a>
+    <!-- <a href="">Please Login to Buy a product</a> -->
     <br>
     <br>
     <br>
     <br>
+
+
     <a href="/api/cart/add/<%=product.slug%>"><img src="https://www.nationalcrimesyndicate.com/wp-content/uploads/2017/07/buy_now_star.jpg" alt="buyNow" class="buyNow"></a>
 
 </div>

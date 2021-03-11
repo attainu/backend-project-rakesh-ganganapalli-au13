@@ -1,11 +1,11 @@
-const pages  = require('../../models/adminPages')
+const pages  = require('../../models/adminPages');
 
 
 
 const userPages = {
 
     gethomePage(req,res){
-    
+
         res.redirect('/api/user/Allproducts')
     },
 

@@ -1,11 +1,13 @@
 const router = require("express").Router();
 
-const userPageController = require('../../controllers/User/userPagesController')
+const userPageController = require('../../controllers/User/userPagesController');
+
+const auth  = require('../../middlewere/tokenValidation')
 
 
 /*Method :Get
 getting home page*/
-router.get("/user",userPageController.gethomePage);
+router.get("/home",userPageController.gethomePage);
 
 
 

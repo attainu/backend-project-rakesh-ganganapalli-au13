@@ -1,4 +1,6 @@
 const product = require('../../models/adminProducts');
+const user   = require('../../models/signUp');
+
 
 
 const userProducts={
@@ -36,6 +38,8 @@ const userProducts={
 
     
     async getProductDetails(req,res){
+
+        // console.log(req.header('auth-token'))
 
         let cat = req.params.category;
         let pro = req.params.product;
