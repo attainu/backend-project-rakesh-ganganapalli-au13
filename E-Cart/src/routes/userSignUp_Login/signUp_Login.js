@@ -174,10 +174,8 @@ router.post('/',async(req,res)=>{
 
     // console.log(token)
 
-    res.header('auth-token',token).redirect('/home')
+    res.header('auth',token).redirect('/home')
     // res.
-
-
 
     
 });
@@ -185,5 +183,9 @@ router.post('/',async(req,res)=>{
 
 
 
+router.get('/api/user/logout',(req,res)=>{
+
+    res.redirect('/')
+})
 
 module.exports = router;

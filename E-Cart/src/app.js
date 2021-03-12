@@ -5,9 +5,9 @@ const app = express();
 const expressValidator  = require('express-validator');
 const DBconnection      =  require("./config/db");
 const session           = require("express-session");
-const cors              = require('cors')
-
-const port              =  process.env.PORT || 4000
+const cors              = require('cors');
+const cookie            = require('cookie-parser');
+const port              =  process.env.PORT || 4000;
 
 
 
@@ -64,6 +64,8 @@ app.use(session({
     saveUninitialized : true,
     cookie :{secure:false}
 }));
+
+app.use(cookie())
 
 //cors middlewere 
 app.use(cors())

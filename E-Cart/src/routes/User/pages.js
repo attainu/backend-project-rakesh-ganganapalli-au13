@@ -14,7 +14,7 @@ router.get("/home",userPageController.gethomePage);
 
 /*Method : Get 
 getting pages*/
-router.get("/:slug",userPageController.getPages);
+router.get("/api/:slug",userPageController.getPages);
 
 
 

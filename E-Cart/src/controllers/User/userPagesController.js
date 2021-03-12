@@ -5,12 +5,12 @@ const pages  = require('../../models/adminPages');
 const userPages = {
 
     gethomePage(req,res){
-
         res.redirect('/api/user/Allproducts')
     },
 
 
     async getPages(req,res){
+        
         let slug = req.params.slug;
         await pages.find({slug:slug},(err,page)=>{
     
