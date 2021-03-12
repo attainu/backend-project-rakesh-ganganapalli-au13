@@ -1,25 +1,25 @@
 const router = require('express').Router();
 const userProductsController = require('../../controllers/User/userProductsController');
-
+const isLogin = require('../../middlewere/isLoggedin')
 
 
 
 /*Method : Get 
 get all products*/
-router.get('/Allproducts',userProductsController.getAllProducts);
+router.get('/Allproducts',isLogin,userProductsController.getAllProducts);
 
 
 
 
 /*Method : Get 
 product products by category*/
-router.get('/:category/products',userProductsController.getProduct)
+router.get('/:category/products',isLogin,userProductsController.getProduct)
 
 
 
 /*Method : Get 
 get product details*/
-router.get('/:category/:product',userProductsController.getProductDetails)
+router.get('/:category/:product',isLogin,userProductsController.getProductDetails)
 
 
 

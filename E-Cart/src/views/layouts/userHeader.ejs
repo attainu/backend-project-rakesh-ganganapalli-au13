@@ -30,7 +30,13 @@
 
 
         <ul class="nav navbar-nav navbar-right"> 
-          <li><a href="/api/admin/pages" target="_blank">Admin</a></li>         <!--for display products length in cart-->
+
+          <%if(email == 'rakeshganganapalli72@gmail.com'){%>
+
+            <li><a href="/api/admin/pages">Admin</a></li> 
+            
+            <%}%>
+         
           <li><a href="/api/user/logout">Logout</a></li> 
          
 

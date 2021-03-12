@@ -55,17 +55,17 @@ app.use(expressValidator({
         }
     }}));
 
-
-
+//cookie-parser setup
+app.use(cookie())
 //express-sessions Middle were 
 app.use(session({
-    secret:"keyboard cat",
+    secret:process.env.SESSION_SECREAT,
     resave : false,
     saveUninitialized : true,
-    cookie :{secure:false}
+    cookie :{maxAge:60000}
 }));
 
-app.use(cookie())
+
 
 //cors middlewere 
 app.use(cors())
@@ -75,7 +75,8 @@ app.use(cors())
 //set up for cart 
 app.get('*',(req,res,next)=>{
     // console.log(req.session.cart)
-    res.locals.cart = req.session.cart
+    res.locals.cart = req.session.cart;
+    // req.locals.user =  req.session.user;
     next()
 })
 

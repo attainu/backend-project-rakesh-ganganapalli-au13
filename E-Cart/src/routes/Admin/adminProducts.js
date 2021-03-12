@@ -1,6 +1,8 @@
 const router     = require("express").Router();
 const multer     = require("multer");
 const adminProductsController = require('../../controllers/Admin/adminProducts');
+const isLogin = require('../../middlewere/isAdmin')
+
 
 
 const upload = multer({
@@ -12,38 +14,38 @@ const upload = multer({
 
 /*Method : Get
 get all products*/
-router.get('/',adminProductsController.getAllProducts);
+router.get('/',isLogin,adminProductsController.getAllProducts);
 
 
 
 
 /*Method : Get
 add  products*/
-router.get('/add-product',adminProductsController.getAddProduct);
+router.get('/add-product',isLogin,adminProductsController.getAddProduct);
 
 
 
 
 /*Method : post
 add  products*/
-router.post('/add-product',upload.single('image'),adminProductsController.postAddProduct);
+router.post('/add-product',isLogin,upload.single('image'),adminProductsController.postAddProduct);
 
 
 /*Method : Get
 edit  products*/
-router.get('/edit-product/:id',adminProductsController.getEditProduct);
+router.get('/edit-product/:id',isLogin,adminProductsController.getEditProduct);
 
 
 
 /*Method : post
 edit  products*/
-router.post('/edit-product/:id',upload.single('image'),adminProductsController.postEditProduct);
+router.post('/edit-product/:id',isLogin,upload.single('image'),adminProductsController.postEditProduct);
 
 
 
 /*Method : Get
 delete  products*/
-router.get('/delete-product/:id',adminProductsController.getDeleteProduct);
+router.get('/delete-product/:id',isLogin,adminProductsController.getDeleteProduct);
 
 
 

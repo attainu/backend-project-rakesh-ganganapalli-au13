@@ -10,6 +10,7 @@ const userProducts={
             if(err) return console.log(err);
     
             let data = {
+                email :req.session.user.email,
                 title : "All products",
                 name  : 'All products',
                 products : pro
@@ -27,6 +28,7 @@ const userProducts={
        let result = await product.find({category:slug});
     
        let data = {
+           email    :req.session.user.email,
            title    : 'products',
            name     :  slug,
            products : result
@@ -47,6 +49,7 @@ const userProducts={
         let result = await product.find({category:cat,slug:pro});
     
         let data = {
+           email :req.session.user.email,
            title    : 'products',
            product  : result[0]
         };

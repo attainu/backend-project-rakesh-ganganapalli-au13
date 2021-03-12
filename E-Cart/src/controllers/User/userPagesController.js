@@ -20,6 +20,7 @@ const userPages = {
                 return res.redirect('/api/user') 
             }else{
                 let data = {
+                    email :req.session.user.email,
                     title : page[0].title,
                     contant : page[0].contant
                 }

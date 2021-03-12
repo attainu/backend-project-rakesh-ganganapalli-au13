@@ -56,6 +56,7 @@ const cartControllers = {
 
      getCartPage(req,res){
         let data = {
+            email :req.session.user.email,
             title : "My cart"
         }
         res.render('user/cart',data)

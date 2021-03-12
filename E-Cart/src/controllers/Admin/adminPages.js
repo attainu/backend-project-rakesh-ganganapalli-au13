@@ -121,8 +121,8 @@ const AdminPages = {
         req.checkBody('contant','please enter contant').notEmpty()
     
             let title = req.body.title;
-            let slug = req.body.slug.replace(/\s+/g,'-').toLowerCase();
-            if(slug=='') slug = title.replace(/\s+/g,'-').toLowerCase();
+            let slug = title.replace(/\s+/g,'-').toLowerCase();
+            // if(slug=='') slug = title.replace(/\s+/g,'-').toLowerCase();
             let contant = req.body.contant
             let id      = req.body.id
     
